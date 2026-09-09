@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//ENUMS
+enum Status{
+    AVAILABLE
+    UNAVAILABLE
+}
+
+enum Category{
+    ELECTRONICS
+    CLOTHING
+    BOOKS
+    SCHOOL
+    SPORTS
+    TOOLS
+    HOUSEHOLD
+    OTHER
+}
+
+enum LendingStatus{
+    ACTIVE
+    DUE SOON
+    OVERDUE
+    RETURNED
+}
+
+//MODELS
+
+model User{
+    id           String   @id @default(uuid()) @db.Uuid
+    name         String
+    email        String @unique
+    passwordHash String
+    item         Item[]
+    borrower     Borrower[]
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @default(now())
+}
+
+model Item{
+    id          String @id @default(uuid()) @db.Uuid
+    userId      String @db.Uuid
+    name        String
+    description String?
+    category    Category @default(OTHER) 
+    imageUrl    String?
+    identifier  String?
+    status      Status
+    lendingRecord LendingRecord[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now())
+
+    owner       User @reference(fields: [userId], reference: [id])
+}
+
+model Borrower{
+    id          String @id @default(uuid()) @db.Uuid
+    userId      String
+    name        String
+    phone       String @unique
+    email       String @unique
+    notes       String?
+    lendingRecord LendingRecord[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now())
+
+    lender      User @reference(fields: [userId], reference: [id])
+}
+
+model LendingRecord{
+    id                  String @id @default(uuid()) @db.Uuid
+    itemId              String @db.Uuid
+    borrowerId          String @db.Uuid
+    lentAt              DateTime @default(now())
+    expectedReturnDate  DateTime
+    returnedAt          DateTime?
+    notes               String?
+    status              LendingStatus @default(ACTIVE)
+    createdAt           DateTime @default(now())
+    updatedAt           DateTime @default(now())
+
+    borrower            Borrower @reference(fields: [borrowerId], reference: [id])
+    item                Item @reference(fields: [itemId], reference: [id])
+}
