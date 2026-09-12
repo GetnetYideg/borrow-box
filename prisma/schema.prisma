@@ -1,12 +1,15 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
-  importFileExtension = "js"
 }
 
 datasource db {
-  provider = "postgresql",
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
 }
 
 //ENUMS
@@ -28,7 +31,7 @@ enum Category{
 
 enum LendingStatus{
     ACTIVE
-    DUE SOON
+    DUESOON
     OVERDUE
     RETURNED
 }
@@ -59,12 +62,12 @@ model Item{
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now())
 
-    owner       User @reference(fields: [userId], reference: [id])
+    owner       User @relation(fields: [userId], references: [id])
 }
 
 model Borrower{
     id          String @id @default(uuid()) @db.Uuid
-    userId      String
+    userId      String @db.Uuid
     name        String
     phone       String @unique
     email       String @unique
@@ -73,7 +76,7 @@ model Borrower{
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now())
 
-    lender      User @reference(fields: [userId], reference: [id])
+    lender      User @relation(fields: [userId], references: [id])
 }
 
 model LendingRecord{
@@ -88,6 +91,6 @@ model LendingRecord{
     createdAt           DateTime @default(now())
     updatedAt           DateTime @default(now())
 
-    borrower            Borrower @reference(fields: [borrowerId], reference: [id])
-    item                Item @reference(fields: [itemId], reference: [id])
+    borrower            Borrower @relation(fields: [borrowerId], references: [id])
+    item                Item @relation(fields: [itemId], references: [id])
 }
