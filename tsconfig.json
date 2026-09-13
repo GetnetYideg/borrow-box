@@ -1,14 +1,20 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
+    "target": "ES2022",                // Or your preferred JS version
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",             // Or NodeNext / ESNext depending on your setup
+    "outDir": "./dist",                // Specifies where compiled JS files go
+    "rootDir": "./",                // Specifies where your source TS files are located
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     // File Layout
     // "rootDir": "./src",
     // "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],
@@ -33,12 +39,11 @@
     // "noPropertyAccessFromIndexSignature": true,
 
     // Recommended Options
-    "strict": true,
     "jsx": "react-jsx",
     //"verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
-  }
+  },
+  "include": ["src/**/*"],              // Tells compiler to look inside 'src'
 }
