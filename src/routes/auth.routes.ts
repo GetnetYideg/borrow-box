@@ -5,4 +5,6 @@ import { register } from '../controllers/auth.controller.js';
 
 const authRouter = Router();
 
-authRouter.post('/', validateBody(createAccountSchema), register);
+authRouter.post('/register', validateBody(createAccountSchema), register);
+
+export default authRouter;
