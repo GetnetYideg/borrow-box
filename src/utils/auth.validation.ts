@@ -29,5 +29,12 @@ export const createAccountSchema = Joi.object({
             'string.max': 'Password cannot exceed 30 characters.',
             'string.empty': 'Password cannot be empty.',
             'any.required': 'Password is a required field.'
+        }),
+    confirmPassword: Joi.any()
+        .valid(Joi.ref('password'))
+        .required()
+        .messages({
+            'any.only': 'Passwords do not match.',
+            'any.required': 'Please confirm your password.'
         })
 })
