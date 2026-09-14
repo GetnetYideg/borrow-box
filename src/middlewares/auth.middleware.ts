@@ -5,7 +5,7 @@ import prisma from "../../config/prisma.js";
 import { decode } from "punycode";
 
 interface TokenPayload {
-  id: string; // Change to string if your DB uses UUID/CUID
+  userId: string; // Change to string if your DB uses UUID/CUID
 }
 
 interface AuthRequest extends Request {
@@ -21,11 +21,11 @@ const authenticateToken = async (
     res: Response, 
     next: NextFunction)=>{
         try{
-            const authHeader = req.body('authorization');
+            const authHeader = req.headers.authorization;
             const token = authHeader && authHeader.split(' ')[1];
 
             if(!token){
-                res.status(401).json({message: "Access Denied, Token not provided"})
+                return res.status(401).json({message: "Access Denied, Token not provided"})
             }
         
             const secret = process.env.JWT_SECRET;
@@ -33,9 +33,9 @@ const authenticateToken = async (
                 throw new AppError(500, "JWT secret is not provided in environmental variable");
             }
 
-            const decoded = await jwt.verify(token, secret) as TokenPayload;
+            const decoded = jwt.verify(token, secret) as unknown as TokenPayload;
             const user = await prisma.user.findUnique({
-                where: {id: decoded.id},
+                where: {id: decoded.userId},
                 select: {
                     id: true,
                     name: true,
@@ -54,3 +54,5 @@ const authenticateToken = async (
             throw error;
         }
 }
+
+export default authenticateToken;
