@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { signAccessToken, verifyRefreshToken } from "../utils/generate.token.js";
 import * as authService from "../services/auth.service.js";
 
 export const register = async (
@@ -51,5 +52,25 @@ export const logout = (
             })
         } catch (error) {
             next(error)
+        }
+    }
+
+export const refreshAccessToken = (
+    req: Request, 
+    res: Response, 
+    next: NextFunction) =>{
+        try {
+            const refreshToken = req.cookies.refreshToken;
+            if(!refreshToken){
+                res.status(401).json({message: "Refresh Token not found"})
+            }
+
+            const decoded = verifyRefreshToken(refreshToken);
+
+            const accessToken = signAccessToken({userId: decoded.userId})
+
+            res.status(200).json({accessToken});
+        } catch (error) {
+            res.status(401).json({message: "Invalid or expired token"})
         }
     }
