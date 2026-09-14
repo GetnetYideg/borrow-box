@@ -31,9 +31,12 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
+    "@types/cookie-parser": "^1.4.10",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "express": "^5.2.1",
     "joi": "^18.2.9",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.0"
   },
   "type": "module"
