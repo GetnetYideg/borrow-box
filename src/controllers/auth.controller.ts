@@ -26,12 +26,30 @@ export const login = async (
                 sameSite: 'lax',
                 maxAge: 7 * 24 * 60 * 60 * 1000
             })
-            
+
             res.status(200).json({
                 data, 
                 accessToken
             });
         }catch(error){
+            next(error)
+        }
+    }
+
+export const logout = (
+    req: Request,
+    res: Response,
+    next: NextFunction) =>{
+        try {
+            res.clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax"
+            });
+            res.status(200).json({
+                message: "Logout successfully"
+            })
+        } catch (error) {
             next(error)
         }
     }
