@@ -6,8 +6,9 @@ import {
     createAccountInput, 
     loginAccountInput 
 } from "../models/auth.model.js";
+import { signAccessToken, signRefreshToken } from "../utils/generate.token.js";
 
-export const register = async (data: createAccountInput) => {
+export const registerationService = async (data: createAccountInput) => {
     try{ 
         const {name, email, password} = data;
         const existing = await prisma.user.findUnique({ where: { email } });
@@ -29,6 +30,45 @@ export const register = async (data: createAccountInput) => {
     }catch(error){
         if (error instanceof AppError) throw error;
         console.error("Registration faild:", error);
+        throw error;
+    }
+}
+
+export const loginService = async (data: loginAccountInput) =>{
+    try{
+        const { email, password } = data;
+        const user = await prisma.user.findUnique({
+            where:{
+                email: email
+            },
+            select:{
+                id: true,
+                name: true,
+                email: true,
+                passwordHash: true
+            }
+        });
+        
+        if(!user){
+            throw new AppError(401, "Inalid cridential")
+        }
+
+        const passwordMatch = bcrypt.compare(password, user.passwordHash);
+        if(!passwordMatch){
+            throw new AppError(401, "Invalid cridential")
+        }
+
+        const accessToken = signAccessToken({userId: user.id})
+        const refreshToken = signRefreshToken({userId: user.id})
+
+        return {
+            data: user,
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        }
+    }catch(error){
+        if (error instanceof AppError) throw error;
+        console.error("Login failed:", error);
         throw error;
     }
 }
