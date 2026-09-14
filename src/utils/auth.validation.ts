@@ -38,3 +38,27 @@ export const createAccountSchema = Joi.object({
             'any.required': 'Please confirm your password.'
         })
 })
+
+export const loginAccountSchema = Joi.object({
+    email: Joi
+        .string()
+        .lowercase()
+        .pattern(corporateEmailRegex)
+        .required()
+        .messages({
+            'string.pattern.base': 'Email must be a valid internal @company.com address.',
+            'string.empty': 'Email cannot be left blank.',
+            'any.required': 'Email is required.'
+        }),
+    password: Joi
+        .string()
+        .min(8)
+        .max(50)
+        .required()
+        .messages({
+            'string.min': 'Password must be at least 8 characters long.',
+            'string.max': 'Password cannot exceed 30 characters.',
+            'string.empty': 'Password cannot be empty.',
+            'any.required': 'Password is a required field.'
+        })
+})
