@@ -17,7 +17,7 @@ export const createItem = async (
         try {
             const userId = req.user?.id;
             if(!userId){
-                throw new AppError(404, "Id not found")
+                throw new AppError(401, "Unauthorized")
             }
             const item = await itemServices.createItemService(req.body, userId)
 
@@ -26,3 +26,22 @@ export const createItem = async (
             next(error)
         }
 }
+
+export const getAllItems = async (
+    req: newRequest,
+    res: Response,
+    next: NextFunction): Promise<void> =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId){
+                throw new AppError(401, "Unauthorized")
+            }
+    
+            const items = await itemServices.getAllItemsService(userId);
+            
+            res.status(200).json(items)
+            
+        } catch (error) {
+            next(error)
+        }
+    }
