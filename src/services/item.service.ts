@@ -33,3 +33,18 @@ export const createItemService = async (data: createItemInput, userId: string) =
         throw error;
     }
 }
+
+export const getAllItemsService = async (userId: string) =>{
+    try {
+        const items = await prisma.item.findMany({
+            where:{
+                userId
+            }
+        });
+        
+        return items
+    } catch (error) {
+        console.error("Process faild", error)
+        throw error
+    }
+}
