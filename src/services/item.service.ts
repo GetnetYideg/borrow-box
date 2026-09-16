@@ -68,3 +68,22 @@ export const searchItemService = async (userId: string, itemId: string) =>{
         throw error;
     }
 }
+
+export const deleteItemService = async (userId: string, itemId: string) =>{
+    try {
+        const existing = await prisma.item.findUnique({where: {id: itemId}})
+        if(!existing){
+            throw new AppError(404, "Item not found");
+        }
+        
+        const result = await prisma.item.delete({
+            where: {
+                id: itemId,
+                userId
+            }
+        })
+    } catch (error) {
+        console.log("Process failed: ", error)
+        throw error
+    }
+}
