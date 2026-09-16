@@ -29,7 +29,7 @@ export const createItemService = async (data: createItemInput, userId: string) =
         })
     } catch (error) {
         if (error instanceof AppError) throw error;
-        console.error("Registration faild:", error);
+        console.error("Registration failed:", error);
         throw error;
     }
 }
@@ -44,7 +44,27 @@ export const getAllItemsService = async (userId: string) =>{
         
         return items
     } catch (error) {
-        console.error("Process faild", error)
+        console.error("Process failed", error)
         throw error
+    }
+}
+
+export const searchItemService = async (userId: string, itemId: string) =>{
+    try {
+        const existing = await prisma.item.findUnique({where: {id: itemId}})
+        if(!existing){
+            throw new AppError(404, "Item not found");
+        }
+        const item = await prisma.item.findUnique({
+            where: {
+                id: itemId,
+                userId
+            }
+        })
+
+        return item;
+    } catch (error) {
+        console.error("Process failed", error);
+        throw error;
     }
 }
