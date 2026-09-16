@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import * as itemServices from '../services/item.service.js';
 import { AppError } from '../utils/app.error.js';
+import app from '../app.js';
 
 interface newRequest extends Request {
   user?: {
@@ -64,6 +65,32 @@ export const searchItem = async (
             const item = await itemServices.searchItemService(userId, itemId);
 
             res.status(200).json(item);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+export const deleteItem = async (
+    req: newRequest,
+    res: Response,
+    next: NextFunction): Promise<void> =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId){
+                throw new AppError(401, "Unauthorized");
+            }
+    
+            const itemId = String(req.params.id);
+            if(!itemId){
+                throw new AppError(400, "Id not provided")
+            }
+    
+            const result = await itemServices.deleteItemService(userId, itemId)
+    
+            res.status(200).json({
+                deletedRows: result,
+                message: "Record deleted successfully"
+            })   
         } catch (error) {
             next(error);
         }
