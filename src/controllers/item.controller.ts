@@ -45,3 +45,26 @@ export const getAllItems = async (
             next(error)
         }
     }
+
+export const searchItem = async (
+    req: newRequest,
+    res: Response,
+    next: NextFunction): Promise<void> =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId){
+                throw new AppError(401, "Unauthorized")
+            }
+
+            const itemId = String(req.params.id);
+            if(!itemId){
+                throw new AppError(400, "Id not provided")
+            }
+          
+            const item = await itemServices.searchItemService(userId, itemId);
+
+            res.status(200).json(item);
+        } catch (error) {
+            next(error);
+        }
+    }
