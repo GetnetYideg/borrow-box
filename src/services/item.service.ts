@@ -3,6 +3,7 @@ import prisma from "../../config/prisma.js";
 import { AppError } from "../utils/app.error.js";
 import { createItemInput } from "../models/item.model.js";
 import { connect } from "http2";
+import { Category } from "../generated/prisma/enums.js";
 
 export const createItemService = async (data: createItemInput, userId: string) =>{
     try {
@@ -85,5 +86,24 @@ export const deleteItemService = async (userId: string, itemId: string) =>{
     } catch (error) {
         console.log("Process failed: ", error)
         throw error
+    }
+}
+
+export const filterByCategoryService = async (userId: string, category: Category) =>{
+    try {
+        const items = await prisma.item.findMany({
+            where:{
+                category
+            }
+        })
+    
+        if(!items){
+            throw new AppError(404, "items not found")
+        }
+    
+        return items;
+    } catch (error) {
+        console.log("Process Failed", error);
+        throw error;
     }
 }
