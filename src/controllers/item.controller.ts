@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import * as itemServices from '../services/item.service.js';
 import { AppError } from '../utils/app.error.js';
-import app from '../app.js';
+import { Category } from '../generated/prisma/enums.js';
 
 interface newRequest extends Request {
   user?: {
@@ -95,3 +95,35 @@ export const deleteItem = async (
             next(error);
         }
     }
+
+export const filterByCategory = async (
+    req: newRequest,
+    res: Response, 
+    next: NextFunction): Promise<void> =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId) throw new AppError(401, "Unauthorized");
+
+            const category = parseCategory(req.query.category);
+
+            if(!category) throw new AppError(400, "Invalid Category");
+
+            const items = await itemServices.filterByCategoryService(userId, category)
+            
+            res.status(200).json(items)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
+function parseCategory(value: unknown): Category | undefined {
+  if (
+    typeof value === "string" &&
+    Object.values(Category).includes(value as Category)
+  ) {
+    return value as Category;
+  }
+
+  return undefined;
+}
