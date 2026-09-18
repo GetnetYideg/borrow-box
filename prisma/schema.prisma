@@ -69,8 +69,8 @@ model Borrower{
     id          String @id @default(uuid()) @db.Uuid
     userId      String @db.Uuid
     name        String
-    phone       String @unique
-    email       String @unique
+    phone       String? @unique
+    email       String? @unique
     notes       String?
     lendingRecord LendingRecord[]
     createdAt   DateTime @default(now())
