@@ -1,6 +1,7 @@
 import { createBorrowerInput } from "../models/borrower.model.js";
 import prisma from "../../config/prisma.js";
 import { AppError } from "../utils/app.error.js";
+import borrowerRouter from "../routes/borrower.routes.js";
 
 export const createBorrowerService = async (userId: string, data: createBorrowerInput) =>{
     try {
@@ -58,5 +59,30 @@ export const searchBorrowerService = async (userId: string, borrowerId: string) 
     } catch (error) {
         console.log("Process failed: ", error);
         throw error
+    }
+}
+
+export const deleteBorrowerService = async (userId: string, borrowerId: string) =>{
+    try {
+        const existing = await prisma.borrower.findUnique({
+            where:{
+                id: borrowerId,
+                userId
+            }
+        })
+    
+        if(!existing) throw new AppError(404, "Borrower not found");
+    
+        const result = await prisma.borrower.delete({
+            where: {
+                id: borrowerId,
+                userId
+            }
+        })
+    
+        return result;    
+    } catch (error) {
+        console.log("Process Failed: ", error);
+        throw error;
     }
 }
