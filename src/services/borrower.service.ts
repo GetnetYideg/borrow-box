@@ -1,0 +1,32 @@
+import { createBorrowerInput } from "../models/borrower.model.js";
+import prisma from "../../config/prisma.js";
+import { AppError } from "../utils/app.error.js";
+
+export const createBorrowerService = async (userId: string, data: createBorrowerInput) =>{
+    try {
+        const { name, notes } = data;
+        const email = data.email;
+        const phone = data.phone;
+
+        if (!name){
+            throw new AppError(400, "Insert required fields")
+        }
+        return await prisma.borrower.create({
+            data: {
+                name,
+                phone,
+                email,
+                notes,
+                lender:{
+                    connect: {
+                        id: userId
+                    }
+                }
+            }
+        })
+    } catch (error) {
+        if (error instanceof AppError) throw error;
+        console.error("Registration failed:", error);
+        throw error;
+    }
+}
