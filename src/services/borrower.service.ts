@@ -30,3 +30,15 @@ export const createBorrowerService = async (userId: string, data: createBorrower
         throw error;
     }
 }
+export const getAllBorrowersService = async(userId: string) =>{
+    try {
+        return await prisma.borrower.findMany({
+            where:{
+                userId
+            }
+        })
+    } catch (error) {
+        console.log("Process Failed: ", error);
+        throw error
+    }
+}
