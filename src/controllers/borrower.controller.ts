@@ -60,3 +60,23 @@ export const searchBorrower = async (
             next(error);
         }
     }
+
+export const deleteBorrower = async (
+    req: newRequest,
+    res: Response,
+    next: NextFunction): Promise<void> =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId) throw new AppError(401, "Unauthorized");
+            
+            const borrowerId = String(req.params.id);
+    
+            const result = await borrowerService.deleteBorrowerService(userId, borrowerId);
+    
+            if(!result) throw new AppError(400, "Deletion Failed");
+            
+            res.status(200).json("Borrower deleted successfully!");
+        } catch (error) {
+            next(error)
+        }
+    }
