@@ -42,3 +42,21 @@ export const getAllBorrowers = async(
             next(error)
         }
     }
+
+export const searchBorrower = async (
+    req: newRequest,
+    res: Response,
+    next: NextFunction): Promise<void> =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId) throw new AppError(401, "Unauthorized");
+    
+            const borrowerId = String(req.params.id);
+    
+            const borrower = await borrowerService.searchBorrowerService(userId, borrowerId);
+    
+            res.status(200).json(borrower)
+        } catch (error) {
+            next(error);
+        }
+    }
