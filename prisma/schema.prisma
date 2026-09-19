@@ -45,6 +45,7 @@ model User{
     passwordHash String
     item         Item[]
     borrower     Borrower[]
+    lendingRecord   LendingRecord[]
     createdAt    DateTime @default(now())
     updatedAt    DateTime @default(now())
 }
@@ -81,6 +82,7 @@ model Borrower{
 
 model LendingRecord{
     id                  String @id @default(uuid()) @db.Uuid
+    userId              String @db.Uuid
     itemId              String @db.Uuid
     borrowerId          String @db.Uuid
     lentAt              DateTime @default(now())
@@ -91,6 +93,7 @@ model LendingRecord{
     createdAt           DateTime @default(now())
     updatedAt           DateTime @default(now())
 
+    user              User @relation(fields: [userId], references: [id])
     borrower            Borrower @relation(fields: [borrowerId], references: [id])
     item                Item @relation(fields: [itemId], references: [id])
 }
