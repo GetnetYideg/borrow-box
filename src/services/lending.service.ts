@@ -2,7 +2,7 @@ import prisma from "../../config/prisma.js";
 import { lendingInputModel } from "../models/lending.model.js";
 import { AppError } from "../utils/app.error.js";
 
-export const createLentdingService = async( userId:string, data: lendingInputModel) =>{
+export const lendItemService = async( userId:string, data: lendingInputModel) =>{
     try {
         const { itemId, borrowerId, expectedReturnDate, notes, status } = data;
 
@@ -25,7 +25,7 @@ export const createLentdingService = async( userId:string, data: lendingInputMod
             }
         })
         if(!updateItem) throw new AppError(400, "Unexpected error");
-        
+
         const borrowerExists = await prisma.borrower.findUnique({
             where: {
                 id: borrowerId
@@ -58,5 +58,30 @@ export const createLentdingService = async( userId:string, data: lendingInputMod
     } catch (error) {
         console.log("Process Failed: ", error);
         throw error   
+    }
+}
+
+export const returnItemService = async (userId: string, lendId: string) =>{
+    try {
+        const data = await prisma.lendingRecord.findUnique({
+            where: {
+                id: lendId,
+                userId
+            }
+        })
+        if(!data) throw new AppError(404, "Lend record not found");
+
+        return await prisma.lendingRecord.update({
+            data:{
+                status: "RETURNED"
+            },
+            where:{
+                id: lendId,
+                userId
+            }
+        });
+    } catch (error) {
+        console.log("Process Failed: ", error);
+        throw error;
     }
 }
