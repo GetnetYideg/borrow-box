@@ -40,3 +40,18 @@ export const returnItem = async(
             next(error)
         }
     }
+
+export const listHistory = async (
+    req: newRequest,
+    res: Response,
+    next: NextFunction): Promise<void> =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId) throw new AppError(401, "Unauthorized");
+    
+            const historyData = await lendingService.lendingHistoryService(userId);
+            res.status(200).json(historyData);  
+        } catch (error) {
+            next(error)
+        }
+    }
