@@ -30,3 +30,30 @@ export const itemInputSchema = Joi.object({
         .string()
         .valid(...Object.values(Status))
 })
+
+export const updateItemInputSchema = Joi.object({
+    name: Joi
+        .string()
+        .trim()
+        .min(3)
+        .max(255)
+        .allow(null),
+    description: Joi
+        .string()
+        .allow(null),
+    category: Joi
+        .string()
+        .valid(...Object.values(Category))
+        .allow(null),
+    imageUrl: Joi
+        .string()
+        .uri()
+        .allow(null),
+    identifier: Joi
+        .string()
+        .allow(null),
+    status: Joi
+        .string()
+        .valid(...Object.values(Status))
+        .allow(null)
+})
