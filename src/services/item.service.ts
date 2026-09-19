@@ -4,6 +4,7 @@ import { AppError } from "../utils/app.error.js";
 import { createItemInput } from "../models/item.model.js";
 import { connect } from "http2";
 import { Category } from "../generated/prisma/enums.js";
+import { useReducer } from "react";
 
 export const createItemService = async (data: createItemInput, userId: string) =>{
     try {
@@ -66,6 +67,39 @@ export const searchItemService = async (userId: string, itemId: string) =>{
         return item;
     } catch (error) {
         console.error("Process failed", error);
+        throw error;
+    }
+}
+
+export const updateItemService = async( userId: string, itemId: string, newData: createItemInput ) =>{
+    try {
+        const data = await prisma.item.findUnique({
+            where: {
+                id: itemId,
+                userId
+            }
+        })
+        if(!data) throw new AppError(404, "Item not found");
+        const { name, description, category, imageUrl, identifier, status } = newData;
+
+        const updatedAt = new Date
+        return await prisma.item.update({
+            data: {
+                name: name || data.name,
+                description: description || data.description,
+                category: category || data.category,
+                imageUrl: imageUrl || data.imageUrl,
+                identifier: identifier || data.identifier,
+                status: status || data.status,
+                updatedAt
+            },
+            where:{
+                id: itemId,
+                userId
+            }
+        })
+    } catch (error) {
+        console.log("Process Failed: ", error);
         throw error;
     }
 }
