@@ -85,3 +85,18 @@ export const returnItemService = async (userId: string, lendId: string) =>{
         throw error;
     }
 }
+
+export const lendingHistoryService = async (userId: string) =>{
+    try {
+        const history = await prisma.lendingRecord.findMany({
+            where:{
+                userId
+            }
+        });
+
+        return history;
+    } catch (error) {
+        console.log('Process Failed: ', error);
+        throw error;
+    }
+}
