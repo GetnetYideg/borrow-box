@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import * as itemServices from '../services/item.service.js';
 import { AppError } from '../utils/app.error.js';
 import { Category } from '../generated/prisma/enums.js';
+import { appendFile } from 'node:fs';
 
 interface newRequest extends Request {
   user?: {
@@ -67,6 +68,25 @@ export const searchItem = async (
             res.status(200).json(item);
         } catch (error) {
             next(error);
+        }
+    }
+
+export const updateItem = async (
+    req: newRequest,
+    res: Response,
+    next: NextFunction): Promise<void> =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId) throw new AppError(401, "Unauthorized");
+
+            const itemId = String(req.params.id);
+            if(!itemId) throw new AppError(400, "Id not provided");
+
+            const result = await itemServices.updateItemService(userId, itemId, req.body)
+
+            res.status(200).json(result);
+        } catch (error) {
+            next(error)
         }
     }
 
