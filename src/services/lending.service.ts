@@ -1,3 +1,4 @@
+import { Console } from "node:console";
 import prisma from "../../config/prisma.js";
 import { lendingInputModel } from "../models/lending.model.js";
 import { AppError } from "../utils/app.error.js";
@@ -97,6 +98,34 @@ export const lendingHistoryService = async (userId: string) =>{
         return history;
     } catch (error) {
         console.log('Process Failed: ', error);
+        throw error;
+    }
+}
+
+export const dueDateTrackingService = async(userId: string, lendId: string) =>{
+    try {
+        const record = await prisma.lendingRecord.findUnique({
+            where: {
+                id: lendId,
+                userId
+            }
+        });
+        if(!record) throw new AppError(404, "Record not found");
+
+        const newDate = new Date;
+        if(newDate > record.expectedReturnDate){
+            return await prisma.lendingRecord.update({
+                data: {
+                    status: "OVERDUE"
+                },
+                where:{
+                    id: lendId,
+                    userId
+                }
+            })
+        }
+    } catch (error) {
+        console.log("Process Failed: ", error);
         throw error;
     }
 }
