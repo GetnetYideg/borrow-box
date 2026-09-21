@@ -1,4 +1,3 @@
-import { Console } from "node:console";
 import prisma from "../../config/prisma.js";
 import { lendingInputModel } from "../models/lending.model.js";
 import { AppError } from "../utils/app.error.js";
@@ -71,10 +70,12 @@ export const returnItemService = async (userId: string, lendId: string) =>{
             }
         })
         if(!data) throw new AppError(404, "Lend record not found");
-
+        const returnedAt = new Date;
+        
         return await prisma.lendingRecord.update({
             data:{
-                status: "RETURNED"
+                status: "RETURNED",
+                returnedAt
             },
             where:{
                 id: lendId,
@@ -113,7 +114,9 @@ export const dueDateTrackingService = async(userId: string, lendId: string) =>{
         if(!record) throw new AppError(404, "Record not found");
 
         const newDate = new Date;
-        if(newDate > record.expectedReturnDate){
+        const dbDate: Date = new Date(record.expectedReturnDate);
+
+        if(newDate > dbDate){
             return await prisma.lendingRecord.update({
                 data: {
                     status: "OVERDUE"
@@ -123,6 +126,22 @@ export const dueDateTrackingService = async(userId: string, lendId: string) =>{
                     userId
                 }
             })
+        }
+
+        const dueDifference = dbDate.getDate() - newDate.getDate();
+        if(dueDifference <= 1){
+            return await prisma.lendingRecord.update({
+                data: {
+                    status: "DUESOON"
+                },
+                where: {
+                    id: lendId,
+                    userId
+                }
+            })
+        }
+        return {
+            message: "It is active!"
         }
     } catch (error) {
         console.log("Process Failed: ", error);
