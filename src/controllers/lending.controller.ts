@@ -55,3 +55,21 @@ export const listHistory = async (
             next(error)
         }
     }
+
+export const trackDueDate = async (
+    req: newRequest,
+    res: Response,
+    next: NextFunction) =>{
+        try {
+            const userId = req.user?.id;
+            if(!userId) throw new AppError(401, "Unauthorized");
+    
+            const lendId = String(req.params.id);
+            
+            const trackedData = await lendingService.dueDateTrackingService(userId, lendId)
+    
+            res.status(200).json(trackedData);
+        } catch (error) {
+            next(error)
+        }
+    }
