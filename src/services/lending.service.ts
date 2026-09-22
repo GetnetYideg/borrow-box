@@ -113,6 +113,8 @@ export const dueDateTrackingService = async(userId: string, lendId: string) =>{
         });
         if(!record) throw new AppError(404, "Record not found");
 
+        if(record.status == "RETURNED") return {message: "The item already returned"};
+        
         const newDate = new Date;
         const dbDate: Date = new Date(record.expectedReturnDate);
 
