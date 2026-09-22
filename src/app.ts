@@ -4,6 +4,7 @@ import authRouter from './routes/auth.routes.js';
 import itemRouter from './routes/item.routes.js';
 import borrowerRouter from './routes/borrower.routes.js';
 import lendingRouter from './routes/lending.routes.js';
+import reminderRouter from './routes/reminder.routes.js';
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use('/api/auth', authRouter);
 app.use('/api/item', itemRouter);
 app.use('/api/borrower', borrowerRouter);
 app.use('/api/lend/', lendingRouter)
+app.use('/api/remind/', reminderRouter)
 
 export default app;
