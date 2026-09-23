@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const corporateEmailRegex = /^[a-zA-Z0-9._%+-]+@company\.com$/;
+const corporateEmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
 export const createAccountSchema = Joi.object({
     name: Joi
@@ -15,7 +15,7 @@ export const createAccountSchema = Joi.object({
         .pattern(corporateEmailRegex)
         .required()
         .messages({
-            'string.pattern.base': 'Email must be a valid internal @company.com address.',
+            'string.pattern.base': 'Email must be a valid @gmail.com address.',
             'string.empty': 'Email cannot be left blank.',
             'any.required': 'Email is required.'
         }),
@@ -46,7 +46,7 @@ export const loginAccountSchema = Joi.object({
         .pattern(corporateEmailRegex)
         .required()
         .messages({
-            'string.pattern.base': 'Email must be a valid internal @company.com address.',
+            'string.pattern.base': 'Email must be a valid @gmail.com address.',
             'string.empty': 'Email cannot be left blank.',
             'any.required': 'Email is required.'
         }),

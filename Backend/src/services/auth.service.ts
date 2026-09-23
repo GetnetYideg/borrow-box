@@ -17,7 +17,7 @@ export const registerationService = async (data: createAccountInput) => {
             throw new AppError(409, "Email already registered!");
         }
 
-        const salt_round: number = Number(process.env.SALT_ROUND);
+        const salt_round: number = Number(process.env.SALT_ROUND) || 10;
         const hashedPassword = await bcrypt.hash(password, salt_round);
 
         return await prisma.user.create({
