@@ -59,12 +59,12 @@ export const LoginPage: React.FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
-            label="Corporate Email"
+            label="Email Address"
             type="email"
-            placeholder="alex@company.com"
+            placeholder="alex@gmail.com"
             leftIcon={<Mail className="w-4 h-4" />}
             error={errors.email?.message}
-            helperText="Must be a valid @company.com email address"
+            helperText="Must be a valid @gmail.com email address"
             {...register('email')}
           />
 

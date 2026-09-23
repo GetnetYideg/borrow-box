@@ -9,7 +9,7 @@ export interface User {
 
 export interface RegisterInput {
   name: string;
-  email: string;       // must be @company.com
+  email: string;       // must be @gmail.com
   password: string;
   confirmPassword: string;
 }

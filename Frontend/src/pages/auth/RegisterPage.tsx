@@ -33,10 +33,12 @@ export const RegisterPage: React.FC = () => {
       setApiError(null);
       await registerUser(values);
     } catch (err: any) {
+      const errorData = err.response?.data?.error;
+      const parsedError = Array.isArray(errorData) ? errorData.join(', ') : errorData;
       const message =
         err.response?.data?.message ||
-        err.response?.data?.error ||
-        'Registration failed. Please ensure the email is @company.com and not already in use.';
+        parsedError ||
+        'Registration failed. Please ensure the email is @gmail.com and not already in use.';
       setApiError(message);
     }
   };
@@ -45,7 +47,7 @@ export const RegisterPage: React.FC = () => {
     <Card className="w-full shadow-lg">
       <CardHeader
         title="Create an account"
-        subtitle="Sign up with your organization email to start tracking items"
+        subtitle="Sign up with your email to start tracking items"
       />
       <CardContent>
         {apiError && <ErrorMessage message={apiError} className="mb-4" />}
@@ -60,12 +62,12 @@ export const RegisterPage: React.FC = () => {
           />
 
           <Input
-            label="Corporate Email"
+            label="Email Address"
             type="email"
-            placeholder="sarah@company.com"
+            placeholder="sarah@gmail.com"
             leftIcon={<Mail className="w-4 h-4" />}
             error={errors.email?.message}
-            helperText="Must be a valid internal @company.com address"
+            helperText="Must be a valid @gmail.com address"
             {...register('email')}
           />
 

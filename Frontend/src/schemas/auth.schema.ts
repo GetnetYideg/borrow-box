@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-// Mirrors backend auth.validation.ts: /^[a-zA-Z0-9._%+-]+@company\.com$/
-const corporateEmailRegex = /^[a-zA-Z0-9._%+-]+@company\.com$/;
+// Mirrors backend auth.validation.ts: /^[a-zA-Z0-9._%+-]+@gmail\.com$/
+const corporateEmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
 export const registerSchema = z
   .object({
@@ -9,7 +9,7 @@ export const registerSchema = z
     email: z
       .string()
       .toLowerCase()
-      .regex(corporateEmailRegex, 'Email must be a valid @company.com address'),
+      .regex(corporateEmailRegex, 'Email must be a valid @gmail.com address'),
     password: z
       .string()
       .min(8, 'Password must be at least 8 characters')
@@ -25,7 +25,7 @@ export const loginSchema = z.object({
   email: z
     .string()
     .toLowerCase()
-    .regex(corporateEmailRegex, 'Email must be a valid @company.com address'),
+    .regex(corporateEmailRegex, 'Email must be a valid @gmail.com address'),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters')
