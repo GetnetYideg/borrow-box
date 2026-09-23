@@ -10,6 +10,7 @@ export const ROUTES = {
   BORROWER_DETAIL: '/borrowers/:id',
   LENDING: '/lending',
   LENDING_DETAIL: '/lending/:id',
+  DUE_SOON_OVERDUE: '/due-soon-overdue',
 } as const;
 
 // Helper to build parameterised paths at runtime
