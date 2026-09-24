@@ -22,6 +22,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/health", (req: express.Request, res: express.Response) => {
+  res.json({ status: "ok" });
+});
+
 app.use('/api/auth', authRouter);
 app.use('/api/item', itemRouter);
 app.use('/api/borrower', borrowerRouter);
