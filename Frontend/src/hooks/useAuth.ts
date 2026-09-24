@@ -7,7 +7,7 @@ import type { LoginInput, RegisterInput } from '../types/auth.types';
 export const useAuth = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user, accessToken, isAuthenticated, setAuth, clearAuth } = useAuthStore();
+  const { user, accessToken, isAuthenticated, isInitializing, setAuth, clearAuth } = useAuthStore();
 
   const loginMutation = useMutation({
     mutationFn: (data: LoginInput) => loginApi(data),
@@ -39,6 +39,7 @@ export const useAuth = () => {
     user,
     accessToken,
     isAuthenticated,
+    isInitializing,
     login: loginMutation.mutateAsync,
     isLoggingIn: loginMutation.isPending,
     loginError: loginMutation.error,
