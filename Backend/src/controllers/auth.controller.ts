@@ -62,7 +62,8 @@ export const refreshAccessToken = (
         try {
             const refreshToken = req.cookies.refreshToken;
             if(!refreshToken){
-                res.status(401).json({message: "Refresh Token not found"})
+                res.status(401).json({message: "Refresh Token not found"});
+                return;
             }
 
             const decoded = verifyRefreshToken(refreshToken);
