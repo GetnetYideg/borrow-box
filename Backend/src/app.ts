@@ -11,12 +11,7 @@ import messageRouter from './routes/message.routes.js';
 const app = express();
 
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://127.0.0.1:5173',
-    ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : [])
-  ],
+  origin: "https://borrow-box-sigma.vercel.app/",
   credentials: true,
 }));
 app.use(express.json());
