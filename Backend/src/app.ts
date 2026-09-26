@@ -13,7 +13,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://borrow-box-moa24.vercel.app/"
+    "https://borrow-box-moa24.vercel.app"
   ],
   credentials: true,
 }));
@@ -27,8 +27,8 @@ app.get("/health", (req: express.Request, res: express.Response) => {
 app.use('/api/auth', authRouter);
 app.use('/api/item', itemRouter);
 app.use('/api/borrower', borrowerRouter);
-app.use('/api/lend/', lendingRouter);
-app.use('/api/remind/', reminderRouter);
-app.use('/api/message/', messageRouter);
+app.use('/api/lend', lendingRouter);
+app.use('/api/remind', reminderRouter);
+app.use('/api/message', messageRouter);
 
 export default app;
