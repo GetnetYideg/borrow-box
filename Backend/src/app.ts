@@ -13,7 +13,8 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://borrow-box-moa24.vercel.app"
+    "https://borrow-box-moa24.vercel.app",
+    "https://borrow-box-sigma.app"
   ],
   credentials: true,
 }));
