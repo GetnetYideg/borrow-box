@@ -14,7 +14,7 @@ app.use(cors({
   origin: [
     "http://localhost:5173",
     "https://borrow-box-moa24.vercel.app",
-    "https://borrow-box-sigma.vercel.app/"
+    "https://borrow-box-sigma.vercel.app"
   ],
   credentials: true,
 }));
